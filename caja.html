@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caja de Supermercado</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('super.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 9rem 2rem 2rem 2rem;
+    }
+
+    h1 {
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .scanner {
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      padding: 0.5rem;
+      width: 300px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .product-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 0.5rem;
+      width: 200px;
+      height: 300px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 130px;
+      object-fit: contain;
+    }
+
+    .product-card h4 {
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+      overflow: hidden;
+    }
+
+    .product-card p {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .quantity-controls button {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background-color: #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .disabled-btn {
+      background-color: #eee !important;
+      color: #999 !important;
+      cursor: not-allowed !important;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
+      padding: 0;
+    }
+
+    .total {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+    }
+
+    button.finalizar {
+      padding: 0.75rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s;
+    }
+
+    button.finalizar:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistema de Gestión de Línea de Cajas</h1>
+  <div class="scanner">
+    <input type="text" id="inputCodigo" placeholder="Ingrese ID o código de barras" autofocus>
+  </div>
+
+  <div class="products" id="productList"></div>
+  <div class="total" id="total">Total: $0.00</div>
+  <button class="finalizar" onclick="finalizarCompra()">Finalizar compra</button>
+
+  <script>
+    const productos = [
+      { id: 1, nombre: "Leche Entera La Serenisima 1 litro", precio: 2110.99, foto: "leche.png", codigo_barras: "7791234567890" },
+      { id: 2, nombre: "Margarina Danica DOrada Cremosa", precio: 2179.50, foto: "danica.png", codigo_barras: "7792345678901" },
+      { id: 3, nombre: "Hamburguesas Paty Clasicas", precio: 5299.00, foto: "paty.jpg", codigo_barras: "7793456789012" },
+      { id: 4, nombre: "Pasta Dental Colgate Maxima Protección 90g", precio: 2490.00, foto: "colgate.png", codigo_barras: "7794567890123" },
+      { id: 5, nombre: "Shampoo Sedal 400ml", precio: 2988.75, foto: "sedal.jpg", codigo_barras: "7795678901234" },
+      { id: 6, nombre: "Nescafe Dolca", precio: 4500.00, foto: "nescafe.jpg", codigo_barras: "7796789012345" }
+    ];
+
+    const input = document.getElementById('inputCodigo');
+    const productList = document.getElementById('productList');
+    const totalDiv = document.getElementById('total');
+    let carrito = [];
+
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const codigo = input.value.trim();
+        const producto = productos.find(p => p.id.toString() === codigo || p.codigo_barras === codigo);
+        if (producto) {
+          agregarProducto(producto);
+        } else {
+          alert("Producto no encontrado");
+        }
+        input.value = '';
+      }
+    });
+
+    function agregarProducto(producto) {
+      const existente = carrito.find(p => p.id === producto.id);
+      if (existente) {
+        existente.cantidad++;
+      } else {
+        carrito.push({ ...producto, cantidad: 1 });
+      }
+      actualizarVista();
+    }
+
+    function eliminarProducto(id) {
+      carrito = carrito.filter(p => p.id !== id);
+      actualizarVista();
+    }
+
+    function cambiarCantidad(id, delta) {
+      const item = carrito.find(p => p.id === id);
+      if (item) {
+        item.cantidad += delta;
+        if (item.cantidad < 1) item.cantidad = 1;
+        actualizarVista();
+      }
+    }
+
+    function calcularTotal() {
+      return carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
+    }
+
+function actualizarVista() {
+  productList.innerHTML = '';
+  carrito.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    const menosDeshabilitado = p.cantidad === 1 ? 'disabled-btn' : '';
+
+    card.innerHTML = `
+      <button class="remove-btn" onclick="eliminarProducto(${p.id})">×</button>
+      <img src="${p.foto}" alt="${p.nombre}" />
+      <h4>${p.nombre}</h4>
+      <div class="quantity-controls">
+        <button class="${menosDeshabilitado}" ${p.cantidad > 1 ? `onclick="cambiarCantidad(${p.id}, -1)"` : ''}>−</button>
+        <span>${p.cantidad}</span>
+        <button onclick="cambiarCantidad(${p.id}, 1)">+</button>
+      </div>
+      <p>Precio unitario: $${p.precio.toFixed(2)}</p>
+    `;
+    productList.appendChild(card);
+  });
+
+  totalDiv.textContent = `Total: $${calcularTotal().toFixed(2)}`;
+}
+
+    function finalizarCompra() {
+      const ticket = carrito.map(p => `${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toFixed(2)}`).join('\n');
+      const mensaje = `${ticket}\n\nTOTAL: $${calcularTotal().toFixed(2)}`;
+      imprimirTicket(mensaje);
+      alert("Compra finalizada");
+      carrito = [];
+      actualizarVista();
+    }
+
+    function imprimirTicket(texto) {
+      const win = window.open('', '', 'width=400,height=600');
+      win.document.write(`<pre>${texto}</pre>`);
+      win.document.close();
+      win.focus();
+      win.print();
+      win.close();
+    }
+  </script>
+</body>
+</html>

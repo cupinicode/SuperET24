@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "nombre": "Leche Entera La Serenisima 1 litro",
+    "precio": 2110.99,
+    "foto": "leche.png",
+    "codigo_barras": "7791234567890"
+  },
+  {
+    "id": 2,
+    "nombre": "Margarina Danica DOrada Cremosa",
+    "precio": 2179.50,
+    "foto": "danica.png",
+    "codigo_barras": "7792345678901"
+  },
+  {
+    "id": 3,
+    "nombre": "Hamburguesas Paty Clasicas",
+    "precio": 5299.00,
+    "foto": "paty.png",
+    "codigo_barras": "7793456789012"
+  },
+  {
+    "id": 4,
+    "nombre": "Pasta Dental Colgate Maxima Protección 90g",
+    "precio": 2490.00,
+    "foto": "colgate.png",
+    "codigo_barras": "7794567890123"
+  },
+  {
+    "id": 5,
+    "nombre": "Shampoo Sedal 400ml",
+    "precio": 2988.75,
+    "foto": "sedal.jpg",
+    "codigo_barras": "7795678901234"
+  },
+  {
+    "id": 6,
+    "nombre": "Nescafe Dolca",
+    "precio": 4500.00,
+    "foto": "nescafe.jpg",
+    "codigo_barras": "7796789012345"
+  },
+  {
+    "id": 7,
+    "nombre": "Azúcar 1Kg",
+    "precio": 620.20,
+    "foto": "https://example.com/img/azucar.jpg",
+    "codigo_barras": "7797890123456"
+  },
+  {
+    "id": 8,
+    "nombre": "Sal Fina 500g",
+    "precio": 299.99,
+    "foto": "https://example.com/img/sal_fina.jpg",
+    "codigo_barras": "7798901234567"
+  },
+  {
+    "id": 9,
+    "nombre": "Mermelada de Durazno 454g",
+    "precio": 950.00,
+    "foto": "https://example.com/img/mermelada_durazno.jpg",
+    "codigo_barras": "7799012345678"
+  },
+  {
+    "id": 10,
+    "nombre": "Galletitas Dulces 300g",
+    "precio": 870.00,
+    "foto": "https://example.com/img/galletitas_dulces.jpg",
+    "codigo_barras": "7790123456789"
+  },
+  {
+    "id": 11,
+    "nombre": "Café Instantáneo 170g",
+    "precio": 2100.00,
+    "foto": "https://example.com/img/cafe_instantaneo.jpg",
+    "codigo_barras": "7791023456789"
+  },
+  {
+    "id": 12,
+    "nombre": "Té Negro 50 Saquitos",
+    "precio": 690.00,
+    "foto": "https://example.com/img/te_negro.jpg",
+    "codigo_barras": "7791123456789"
+  },
+  {
+    "id": 13,
+    "nombre": "Harina 000 1Kg",
+    "precio": 520.00,
+    "foto": "https://example.com/img/harina_000.jpg",
+    "codigo_barras": "7791223456789"
+  },
+  {
+    "id": 14,
+    "nombre": "Mayonesa 250g",
+    "precio": 980.00,
+    "foto": "https://example.com/img/mayonesa.jpg",
+    "codigo_barras": "7791323456789"
+  },
+  {
+    "id": 15,
+    "nombre": "Atún en Lata 170g",
+    "precio": 1490.00,
+    "foto": "https://example.com/img/atun_lata.jpg",
+    "codigo_barras": "7791423456789"
+  },
+  {
+    "id": 16,
+    "nombre": "Jabón de Tocador 125g",
+    "precio": 310.00,
+    "foto": "https://example.com/img/jabon_tocador.jpg",
+    "codigo_barras": "7791523456789"
+  },
+  {
+    "id": 17,
+    "nombre": "Papel Higiénico x4",
+    "precio": 1890.00,
+    "foto": "https://example.com/img/papel_higienico.jpg",
+    "codigo_barras": "7791623456789"
+  },
+  {
+    "id": 18,
+    "nombre": "Lavandina 1L",
+    "precio": 570.00,
+    "foto": "https://example.com/img/lavandina.jpg",
+    "codigo_barras": "7791723456789"
+  },
+  {
+    "id": 19,
+    "nombre": "Detergente 750ml",
+    "precio": 940.00,
+    "foto": "https://example.com/img/detergente.jpg",
+    "codigo_barras": "7791823456789"
+  },
+  {
+    "id": 20,
+    "nombre": "Shampoo 400ml",
+    "precio": 1980.00,
+    "foto": "https://example.com/img/shampoo.jpg",
+    "codigo_barras": "7791923456789"
+  }
+]
