@@ -244,7 +244,19 @@ function actualizarVista() {
 
     function imprimirTicket(texto) {
       const win = window.open('', '', 'width=400,height=600');
+      win.document.write(`<pre>************ SuperET24 ***********</pre>`);
+      win.document.write(`<pre>**********************************</pre>`);
+      win.document.write(`<pre>(documento no válido como factura)</pre>`);
+      win.document.write(`<pre> </pre>`);
       win.document.write(`<pre>${texto}</pre>`);
+      win.document.write(`<pre> </pre>`);
+      win.document.write(`<pre> </pre>`);
+      win.document.write(`<pre> </pre>`);
+      win.document.write(`<pre>Muchas gracias por visitar ExpoTécnica</pre>`);
+      win.document.write(`<pre>   Escuela Técnica Nro. 24</pre>`);
+      win.document.write(`<pre> </pre>`);
+      win.document.write(`<pre>**********************************</pre>`);
+      win.document.write(`<pre> </pre>`);
       win.document.close();
       win.focus();
       win.print();
