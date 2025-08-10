@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Caja de Supermercado</title>
   <style>
     body {
@@ -22,17 +22,11 @@
       text-shadow: 1px 1px 2px #000;
     }
 
-    .scanner {
-      margin-bottom: 1rem;
-    }
-
+    /* Input invisible para el escáner */
     input[type="text"] {
-      padding: 0.5rem;
-      width: 300px;
-      font-size: 1.2rem;
-      border-radius: 10px;
-      border: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .products {
@@ -55,6 +49,18 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: transform 0.3s ease;
+    }
+
+    /* Animación glow */
+    .glow {
+      animation: glowUp 0.4s ease;
+    }
+
+    @keyframes glowUp {
+      0% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
+      50% { transform: scale(1.1); box-shadow: 0 0 15px #00ff00; }
+      100% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
     }
 
     .product-card img {
@@ -74,31 +80,6 @@
       font-weight: bold;
     }
 
-    .quantity-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 0.5rem 0;
-    }
-
-    .quantity-controls button {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background-color: #ccc;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .disabled-btn {
-      background-color: #eee !important;
-      color: #999 !important;
-      cursor: not-allowed !important;
-    }
-
     .remove-btn {
       position: absolute;
       top: 8px;
@@ -107,13 +88,9 @@
       color: white;
       border: none;
       border-radius: 6px;
-      width: 24px;
-      height: 24px;
+      padding: 4px 8px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
-      line-height: 22px;
-      padding: 0;
     }
 
     .total {
@@ -144,9 +121,7 @@
 </head>
 <body>
   <h1>Sistema de Gestión de Línea de Cajas</h1>
-  <div class="scanner">
-    <input type="text" id="inputCodigo" placeholder="Ingrese ID o código de barras" autofocus>
-  </div>
+  <input type="text" id="inputCodigo" autofocus />
 
   <div class="products" id="productList"></div>
   <div class="total" id="total">Total: $0.00</div>
@@ -177,61 +152,71 @@
           alert("Producto no encontrado");
         }
         input.value = '';
+        input.focus();  // Asegurar foco después de ingresar código
       }
     });
 
     function agregarProducto(producto) {
+      // Limitar a 5 productos diferentes
+      if (!carrito.find(p => p.id === producto.id) && carrito.length >= 5) {
+        alert("Máximo 5 productos diferentes.");
+        return;
+      }
       const existente = carrito.find(p => p.id === producto.id);
       if (existente) {
+        if (existente.cantidad >= 5) {
+          alert("Máximo 5 unidades por producto.");
+          return;
+        }
         existente.cantidad++;
+        animarProducto(existente.id);
       } else {
         carrito.push({ ...producto, cantidad: 1 });
+        animarProducto(producto.id);
       }
       actualizarVista();
+      input.focus(); // Asegurar foco tras actualizar vista
+    }
+
+    function animarProducto(id) {
+      setTimeout(() => {
+        const card = document.querySelector(`.product-card[data-id="${id}"]`);
+        if (card) {
+          card.classList.add('glow');
+          setTimeout(() => card.classList.remove('glow'), 400);
+        }
+      }, 50);
     }
 
     function eliminarProducto(id) {
       carrito = carrito.filter(p => p.id !== id);
       actualizarVista();
-    }
-
-    function cambiarCantidad(id, delta) {
-      const item = carrito.find(p => p.id === id);
-      if (item) {
-        item.cantidad += delta;
-        if (item.cantidad < 1) item.cantidad = 1;
-        actualizarVista();
-      }
+      input.focus();  // Asegurar foco después de eliminar producto
     }
 
     function calcularTotal() {
       return carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
     }
 
-function actualizarVista() {
-  productList.innerHTML = '';
-  carrito.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'product-card';
+    function actualizarVista() {
+      productList.innerHTML = '';
+      carrito.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.setAttribute('data-id', p.id);
 
-    const menosDeshabilitado = p.cantidad === 1 ? 'disabled-btn' : '';
+        card.innerHTML = `
+          <button class="remove-btn" onclick="eliminarProducto(${p.id})">Eliminar</button>
+          <img src="${p.foto}" alt="${p.nombre}" />
+          <h4>${p.nombre}</h4>
+          <span>Cantidad: ${p.cantidad}</span>
+          <p>Precio unitario: $${p.precio.toFixed(2)}</p>
+        `;
+        productList.appendChild(card);
+      });
 
-    card.innerHTML = `
-      <button class="remove-btn" onclick="eliminarProducto(${p.id})">×</button>
-      <img src="${p.foto}" alt="${p.nombre}" />
-      <h4>${p.nombre}</h4>
-      <div class="quantity-controls">
-        <button class="${menosDeshabilitado}" ${p.cantidad > 1 ? `onclick="cambiarCantidad(${p.id}, -1)"` : ''}>−</button>
-        <span>${p.cantidad}</span>
-        <button onclick="cambiarCantidad(${p.id}, 1)">+</button>
-      </div>
-      <p>Precio unitario: $${p.precio.toFixed(2)}</p>
-    `;
-    productList.appendChild(card);
-  });
-
-  totalDiv.textContent = `Total: $${calcularTotal().toFixed(2)}`;
-}
+      totalDiv.textContent = `Total: $${calcularTotal().toFixed(2)}`;
+    }
 
     function finalizarCompra() {
       const ticket = carrito.map(p => `${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toFixed(2)}`).join('\n');
@@ -240,6 +225,7 @@ function actualizarVista() {
       alert("Compra finalizada");
       carrito = [];
       actualizarVista();
+      input.focus();  // Asegurar foco tras finalizar compra
     }
 
     function imprimirTicket(texto) {
@@ -250,13 +236,9 @@ function actualizarVista() {
       win.document.write(`<pre> </pre>`);
       win.document.write(`<pre>${texto}</pre>`);
       win.document.write(`<pre> </pre>`);
-      win.document.write(`<pre> </pre>`);
-      win.document.write(`<pre> </pre>`);
       win.document.write(`<pre>Muchas gracias por visitar ExpoTécnica</pre>`);
       win.document.write(`<pre>   Escuela Técnica Nro. 24</pre>`);
-      win.document.write(`<pre> </pre>`);
       win.document.write(`<pre>**********************************</pre>`);
-      win.document.write(`<pre> </pre>`);
       win.document.close();
       win.focus();
       win.print();
