@@ -52,14 +52,14 @@
       transition: transform 0.3s ease;
     }
 
-    /* Animación glow */
+    /* Glow más intenso */
     .glow {
       animation: glowUp 0.4s ease;
     }
 
     @keyframes glowUp {
       0% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
-      50% { transform: scale(1.1); box-shadow: 0 0 15px #00ff00; }
+      50% { transform: scale(1.15); box-shadow: 0 0 25px #00ff00, 0 0 40px #00ff00; }
       100% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
     }
 
@@ -114,8 +114,13 @@
       transition: background 0.3s;
     }
 
-    button.finalizar:hover {
+    button.finalizar:hover:not(:disabled) {
       background-color: #218838;
+    }
+
+    button.finalizar:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -125,7 +130,7 @@
 
   <div class="products" id="productList"></div>
   <div class="total" id="total">Total: $0.00</div>
-  <button class="finalizar" onclick="finalizarCompra()">Finalizar compra</button>
+  <button class="finalizar" id="btnFinalizar" onclick="finalizarCompra()" disabled>Finalizar compra</button>
 
   <script>
     const productos = [
@@ -140,6 +145,7 @@
     const input = document.getElementById('inputCodigo');
     const productList = document.getElementById('productList');
     const totalDiv = document.getElementById('total');
+    const btnFinalizar = document.getElementById('btnFinalizar');
     let carrito = [];
 
     input.addEventListener('keypress', function (e) {
@@ -152,7 +158,6 @@
           alert("Producto no encontrado");
         }
         input.value = '';
-        input.focus();  // Asegurar foco después de ingresar código
       }
     });
 
@@ -175,7 +180,6 @@
         animarProducto(producto.id);
       }
       actualizarVista();
-      input.focus(); // Asegurar foco tras actualizar vista
     }
 
     function animarProducto(id) {
@@ -191,11 +195,15 @@
     function eliminarProducto(id) {
       carrito = carrito.filter(p => p.id !== id);
       actualizarVista();
-      input.focus();  // Asegurar foco después de eliminar producto
+      input.focus();
     }
 
     function calcularTotal() {
       return carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
+    }
+
+    function actualizarEstadoBoton() {
+      btnFinalizar.disabled = carrito.length === 0;
     }
 
     function actualizarVista() {
@@ -216,16 +224,20 @@
       });
 
       totalDiv.textContent = `Total: $${calcularTotal().toFixed(2)}`;
+      actualizarEstadoBoton();
+      input.focus();
     }
 
     function finalizarCompra() {
+      if (carrito.length === 0) return;
+
       const ticket = carrito.map(p => `${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toFixed(2)}`).join('\n');
       const mensaje = `${ticket}\n\nTOTAL: $${calcularTotal().toFixed(2)}`;
       imprimirTicket(mensaje);
       alert("Compra finalizada");
       carrito = [];
       actualizarVista();
-      input.focus();  // Asegurar foco tras finalizar compra
+      input.focus();
     }
 
     function imprimirTicket(texto) {
