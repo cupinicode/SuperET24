@@ -59,7 +59,7 @@
 
     @keyframes glowUp {
       0% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
-      50% { transform: scale(1.15); box-shadow: 0 0 25px #00ff00, 0 0 40px #00ff00; }
+      50% { transform: scale(1.30); box-shadow: 0 0 25px #00ff00, 0 0 40px #00ff00; }
       100% { transform: scale(1); box-shadow: 0 0 0px #00ff00; }
     }
 
@@ -125,7 +125,7 @@
   </style>
 </head>
 <body>
-  <h1>Sistema de Gestión de Línea de Cajas</h1>
+  <h1>Caja de Autogestión</h1>
   <input type="text" id="inputCodigo" autofocus />
 
   <div class="products" id="productList"></div>
@@ -134,12 +134,17 @@
 
   <script>
     const productos = [
-      { id: 1, nombre: "Leche Entera La Serenisima 1 litro", precio: 2110.99, foto: "leche.png", codigo_barras: "7791234567890" },
-      { id: 2, nombre: "Margarina Danica DOrada Cremosa", precio: 2179.50, foto: "danica.png", codigo_barras: "7792345678901" },
-      { id: 3, nombre: "Hamburguesas Paty Clasicas", precio: 5299.00, foto: "paty.jpg", codigo_barras: "7793456789012" },
-      { id: 4, nombre: "Pasta Dental Colgate Maxima Protección 90g", precio: 2490.00, foto: "colgate.png", codigo_barras: "7794567890123" },
-      { id: 5, nombre: "Shampoo Sedal 400ml", precio: 2988.75, foto: "sedal.jpg", codigo_barras: "7795678901234" },
-      { id: 6, nombre: "Nescafe Dolca", precio: 4500.00, foto: "nescafe.jpg", codigo_barras: "7796789012345" }
+      { id: 1,  nombre: "Leche Entera La Serenisima 1 litro", precio: 2110.99, foto: "leche.png", codigo_barras: "7790742335500" },
+      { id: 2,  nombre: "Margarina Danica Dorada Cremosa", precio: 2179.50, foto: "danica.png", codigo_barras: "7791620187778" },
+      { id: 3,  nombre: "Arroz con Leche y Dulce de Leche", precio: 12000.00, foto: "arrozconlecheddl.jpg", codigo_barras: "7793913013467" },
+      { id: 4,  nombre: "Arroz con Leche Descremada", precio: 12000.00, foto: "arrozconlechedes.jpg", codigo_barras: "7793913000504" },
+      { id: 5,  nombre: "Pasta Dental Kolynos Super Blanco 70g", precio: 2490.00, foto: "kolynos.jpg", codigo_barras: "7509546686486" },
+      { id: 6,  nombre: "Pasta Dental Kolynos Super Blanco 70g", precio: 2490.00, foto: "kolynos.jpg", codigo_barras: "7509546692234" },
+      { id: 7,  nombre: "Lampara LED LedVance 9W Fria", precio: 1120.00, foto: "lampara.jpg", codigo_barras: "4058075776517" },
+      { id: 8,  nombre: "Queso Untable Tonadita Jamon", precio: 2115.00, foto: "quesojamon.jpg", codigo_barras: "7798060852990" },
+      { id: 9,  nombre: "Jugo Naranja Cepita Del Valle 1 litro", precio: 2140.00, foto: "cepita.jpg", codigo_barras: "7790895648267" },
+      { id: 10, nombre: "Barra Pop Crocante 15g", precio: 440.00, foto: "barrapop.jpg", codigo_barras: "7798397380081" },
+      { id: 11, nombre: "Barra de Cereal Cereanola", precio: 450.00, foto: "barracereal.jpg", codigo_barras: "7798124098128" }
     ];
 
     const input = document.getElementById('inputCodigo');
