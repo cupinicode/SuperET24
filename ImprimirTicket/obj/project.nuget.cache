@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZsOg4K1rC28=",
+  "success": false,
+  "projectFilePath": "C:\\supermercado\\ImprimirTicket\\ImprimirTicket.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "No se puede leer la información del proyecto de \"ImprimirTicket\": Identificador de marco de trabajo no válido \"\"."
+    }
+  ]
+}

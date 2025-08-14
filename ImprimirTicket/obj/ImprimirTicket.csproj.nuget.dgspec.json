@@ -1,0 +1,30 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\supermercado\\ImprimirTicket\\ImprimirTicket.csproj": {}
+  },
+  "projects": {
+    "C:\\supermercado\\ImprimirTicket\\ImprimirTicket.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\supermercado\\ImprimirTicket\\ImprimirTicket.csproj",
+        "projectPath": "C:\\supermercado\\ImprimirTicket\\ImprimirTicket.csproj",
+        "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
+        "outputPath": "C:\\supermercado\\ImprimirTicket\\obj\\",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        }
+      }
+    }
+  }
+}

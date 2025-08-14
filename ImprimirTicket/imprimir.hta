@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Imprimir Ticket</title>
+<HTA:APPLICATION
+  ID="app"
+  APPLICATIONNAME="ImprimirTicket"
+  BORDER="thin"
+  SCROLL="no"
+  SINGLEINSTANCE="yes"
+  WINDOWSTATE="normal">
+</head>
+<body>
+<script language="javascript">
+function imprimir() {
+    var texto = document.getElementById("ticket").value.replace(/\n/g, "|");
+    var shell = new ActiveXObject("WScript.Shell");
+    shell.Run('"'+ location.pathname.replace("imprimir.hta", "ImprimirTicket.exe") + '" "' + texto + '"');
+}
+</script>
+<textarea id="ticket" rows="10" cols="40"></textarea><br>
+<button onclick="imprimir()">Imprimir Ticket</button>
+</body>
+</html>

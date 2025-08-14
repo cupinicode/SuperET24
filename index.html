@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Caja de Supermercado</title>
+  <!-- Agregar SweetAlert en el <head> -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  <title>Caja de Supermercado</title>
   <style>
     body {
       margin: 0;
@@ -125,7 +126,8 @@
   </style>
 </head>
 <body>
-  <h1>Caja de Autogestión</h1>
+  <br><br><br>
+  <h1>Caja de Autocobro</h1>
   <input type="text" id="inputCodigo" autofocus />
 
   <div class="products" id="productList"></div>
@@ -160,32 +162,44 @@
         if (producto) {
           agregarProducto(producto);
         } else {
-          alert("Producto no encontrado");
+            Swal.fire({
+            icon: 'warning',
+            title: 'Producto no encontrado',
+            confirmButtonText: 'OK'
+            });
         }
         input.value = '';
       }
     });
 
-    function agregarProducto(producto) {
-      // Limitar a 5 productos diferentes
-      if (!carrito.find(p => p.id === producto.id) && carrito.length >= 5) {
-        alert("Máximo 5 productos diferentes.");
-        return;
-      }
-      const existente = carrito.find(p => p.id === producto.id);
-      if (existente) {
-        if (existente.cantidad >= 5) {
-          alert("Máximo 5 unidades por producto.");
-          return;
-        }
-        existente.cantidad++;
-        animarProducto(existente.id);
-      } else {
-        carrito.push({ ...producto, cantidad: 1 });
-        animarProducto(producto.id);
-      }
-      actualizarVista();
+    
+function agregarProducto(producto) {
+  if (!carrito.find(p => p.id === producto.id) && carrito.length >= 5) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Máximo 5 productos diferentes',
+      confirmButtonText: 'Entendido'
+    });
+    return;
+  }
+  const existente = carrito.find(p => p.id === producto.id);
+  if (existente) {
+    if (existente.cantidad >= 5) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Máximo 5 unidades por producto',
+        confirmButtonText: 'OK'
+      });
+      return;
     }
+    existente.cantidad++;
+    animarProducto(existente.id);
+  } else {
+    carrito.push({ ...producto, cantidad: 1 });
+    animarProducto(producto.id);
+  }
+  actualizarVista();
+}
 
     function animarProducto(id) {
       setTimeout(() => {
@@ -239,13 +253,102 @@
       const ticket = carrito.map(p => `${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toFixed(2)}`).join('\n');
       const mensaje = `${ticket}\n\nTOTAL: $${calcularTotal().toFixed(2)}`;
       imprimirTicket(mensaje);
-      alert("Compra finalizada");
+      // alert("Compra finalizada");
       carrito = [];
       actualizarVista();
       input.focus();
     }
 
-    function imprimirTicket(texto) {
+function imprimirTicket(texto) {
+  const lineas = texto.split('\n').filter(line => line.trim() !== '');
+
+   const fecha = new Date();
+  const fechaStr = fecha.toLocaleDateString();
+  const horaStr = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  let total = 0;
+  let cantidadTotal = 0;
+  let cuerpo = "";
+
+  lineas.forEach(linea => {
+    const match = linea.match(/^(.*) x(\d+) - \$([\d.,]+)/);
+    if (match) {
+      const nombre = match[1].trim().slice(0, 20).padEnd(20, ' ');
+      const cantidad = parseInt(match[2]);
+      const precio = parseFloat(match[3].replace(',', '.'));
+      const subtotal = cantidad * precio;
+      total += subtotal;
+      cantidadTotal += cantidad;
+
+      const lineaFormateada = `${cantidad.toString().padStart(2, ' ')} x ${nombre} $${subtotal.toFixed(2).padStart(7, ' ')}`;
+      cuerpo += `${lineaFormateada}\n`;
+    }
+  });
+
+  const ticket = `
+====================================
+
+   ESCUELA TECNICA N° 24 D.E. 17
+
+     "Defensa de Buenos Aires"
+        Cuenca 3246 -- CABA
+         Tel: 11 4501-9251
+
+               [ X ]
+
+ (Documento no valido como factura)
+
+====================================
+
+  ===   S u p e r E T   2 4   ===
+
+====================================
+
+ Fecha: ${fechaStr}  -  Hora: ${horaStr}
+
+------------------------------------
+     - Detalle de su compra -
+
+${cuerpo}
+------------------------------------
+
+Items: ${cantidadTotal.toString().padEnd(3)}         Total: $${total.toFixed(2)}
+
+------------------------------------
+
+   Ciclo Superior de Computación
+Sistema de Gestión de Caja Autocobro
+        para supermercados
+   Proyecto Desarrollado por los
+   alumnos de 6to 6ta Comp. para
+  "Prácticas  Profesionalizantes"
+
+====================================
+
+     Muchas gracias por visitar
+
+ "E x p o T é c n i c a   2 0 2 5"
+        
+    SEDE :  Escuela Técnica N°24
+
+    https://et24de17-caba.edu.ar/
+    mail : det_24_de17@bue.edu.ar
+
+************************************
+`;
+
+  const win = window.open('', '', 'width=400,height=600');
+  win.document.write(`<pre>${ticket}</pre>`);
+  win.document.close();
+  win.focus();
+  win.print();
+  win.close();
+}
+
+
+""
+
+/*     function imprimirTicket(texto) {
       const win = window.open('', '', 'width=400,height=600');
       win.document.write(`<pre>************ SuperET24 ***********</pre>`);
       win.document.write(`<pre>**********************************</pre>`);
@@ -261,6 +364,6 @@
       win.print();
       win.close();
     }
-  </script>
+ */  </script>
 </body>
 </html>
